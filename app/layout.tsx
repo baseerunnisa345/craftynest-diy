@@ -1,18 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+/** Elegant serif for headings — self-hosted by next/font, no layout shift. */
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+/** Clean, friendly sans for body text. */
+const nunitoSans = Nunito_Sans({
+  variable: "--font-nunito-sans",
   subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
 });
 
 const description =
@@ -56,9 +60,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${nunitoSans.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-white text-stone-900">
+      <body className="flex min-h-full flex-col bg-cream text-stone-900">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -66,9 +70,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           }}
         />
         <SiteHeader />
-        <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8">
-          {children}
-        </main>
+        <main className="w-full flex-1">{children}</main>
         <SiteFooter />
       </body>
     </html>

@@ -1,15 +1,26 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Warm craft palette — cream, parchment, sand, terracotta. */
+@theme {
+  --color-cream: #fffaf2;
+  --color-parchment: #faf1e2;
+  --color-sand: #f3e5cd;
+  --color-clay: #b45309;
+  --color-terracotta: #c2410c;
+  --color-terracotta-dark: #9a3412;
+  --color-ink: #1c1917;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-nunito-sans);
+  --font-display: var(--font-fraunces);
+}
+
+:root {
+  --background: #fffaf2;
+  --foreground: #1c1917;
 }
 
 /* Light theme only: article pages must stay readable and print-friendly. */
@@ -17,7 +28,16 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-nunito-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Subtle dotted texture for hero bands — pure CSS, no images. */
+.texture-dots {
+  background-image: radial-gradient(
+    rgba(180, 83, 9, 0.14) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
 }
 
 /* Article links inside rendered paragraphs. */
