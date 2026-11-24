@@ -24,6 +24,12 @@ export const POSTS_DIR = path.join(process.cwd(), "content", "posts");
 export interface PostImage {
   file: string;
   alt: string;
+  /**
+   * Optional short caption shown under the photo on the article page.
+   * When absent, the page falls back to the alt text as the caption.
+   * Frontmatter: images: [{ file, alt, caption }].
+   */
+  caption?: string;
 }
 
 export interface Faq {
@@ -106,10 +112,14 @@ export function parsePost(filePath: string): Post {
   const { data, content } = matter(raw);
 
   const images: PostImage[] = Array.isArray(data.images)
-    ? data.images.map((img: { file: string; alt: string }) => ({
-        file: String(img.file),
-        alt: String(img.alt),
-      }))
+    ? data.images.map(
+        (img: { file: string; alt: string; caption?: string }) => ({
+          file: String(img.file),
+          alt: String(img.alt),
+          // Optional per-image caption; absent captions fall back to alt.
+          ...(img.caption ? { caption: String(img.caption) } : {}),
+        }),
+      )
     : [];
 
   const post: Post = {
