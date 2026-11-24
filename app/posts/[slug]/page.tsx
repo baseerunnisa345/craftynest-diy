@@ -103,8 +103,10 @@ export default async function ArticlePage({ params }: Props) {
     })),
   };
 
+  const pinUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&description=${encodeURIComponent(post.title)}`;
+
   return (
-    <article>
+    <article className="mx-auto max-w-3xl px-4 py-10 sm:py-14">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -121,56 +123,74 @@ export default async function ArticlePage({ params }: Props) {
       />
 
       <nav aria-label="Breadcrumb" className="text-sm text-stone-500">
-        <Link href="/" className="hover:text-amber-800">
+        <Link href="/" className="hover:text-terracotta">
           Home
         </Link>
         {" / "}
-        <Link href="/posts" className="hover:text-amber-800">
+        <Link href="/posts" className="hover:text-terracotta">
           All Ideas
         </Link>
         {" / "}
         <span aria-current="page">{post.title}</span>
       </nav>
 
-      <p className="mt-6 text-xs font-semibold tracking-wide text-amber-700 uppercase">
+      <p className="mt-8 text-xs font-bold tracking-[0.2em] text-terracotta uppercase">
         {post.category}
       </p>
-      <h1 className="mt-2 text-3xl leading-tight font-extrabold tracking-tight text-stone-900 sm:text-4xl">
+      <h1 className="mt-3 font-display text-3xl leading-tight font-semibold tracking-tight text-stone-900 sm:text-5xl">
         {post.title}
       </h1>
-      <p className="mt-3 text-sm text-stone-500">
-        <time dateTime={post.date}>{post.date}</time> · {post.designs.length}{" "}
-        ideas
+      <p className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-stone-500">
+        <time dateTime={post.date}>{post.date}</time>
+        <span aria-hidden="true">·</span>
+        <span>
+          {post.designs.length} ideas, one photo per idea
+        </span>
       </p>
 
       {/* Intro — main keyword appears in the first 100 words (author rule). */}
-      <div className="mt-6 space-y-4 text-lg leading-relaxed text-stone-700">
+      <div className="mt-8 space-y-5 text-lg leading-relaxed text-stone-700">
         {post.intro.map((p, i) => (
           <p key={i} dangerouslySetInnerHTML={{ __html: p }} />
         ))}
       </div>
 
+      <p className="mt-8">
+        <a
+          href={pinUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block rounded-full bg-terracotta px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-terracotta-dark"
+        >
+          Save this idea list on Pinterest
+        </a>
+      </p>
+
       {/* Numbered design sections 1..N — one image per design, in order. */}
       {post.designs.map((design) => (
-        <section key={design.number} className="mt-12">
-          <h2 className="text-2xl font-bold text-stone-900">
-            {design.number}. {design.title}
+        <section key={design.number} className="mt-14">
+          <h2 className="font-display text-2xl leading-snug font-semibold text-stone-900 sm:text-3xl">
+            <span className="text-terracotta">{design.number}.</span>{" "}
+            {design.title}
           </h2>
-          <div className="mt-4 space-y-4 leading-relaxed text-stone-700">
+          <div className="mt-4 space-y-5 leading-relaxed text-stone-700">
             {design.paragraphs.map((p, i) => (
               <p key={i} dangerouslySetInnerHTML={{ __html: p }} />
             ))}
           </div>
           {design.image && (
-            <figure className="mt-5">
+            <figure className="mt-6">
               <Image
                 src={`/images/${slug}/${design.image.file}`}
                 alt={design.image.alt}
                 width={768}
                 height={1152}
                 sizes="(max-width: 768px) 100vw, 768px"
-                className="h-auto w-full max-w-xl rounded-xl"
+                className="h-auto w-full max-w-xl rounded-2xl shadow-md"
               />
+              <figcaption className="mt-3 max-w-xl text-center text-sm leading-relaxed text-stone-500 italic">
+                {design.image.caption ?? design.image.alt}
+              </figcaption>
             </figure>
           )}
         </section>
@@ -178,8 +198,10 @@ export default async function ArticlePage({ params }: Props) {
 
       {/* Takeaway */}
       {post.takeaway.length > 0 && (
-        <section className="mt-12 rounded-xl bg-amber-50 p-6">
-          <h2 className="text-2xl font-bold text-stone-900">Takeaway</h2>
+        <section className="mt-14 rounded-2xl bg-parchment p-6 sm:p-8">
+          <h2 className="font-display text-2xl font-semibold text-stone-900">
+            Takeaway
+          </h2>
           <div className="mt-3 space-y-4 leading-relaxed text-stone-700">
             {post.takeaway.map((p, i) => (
               <p key={i} dangerouslySetInnerHTML={{ __html: p }} />
@@ -190,14 +212,17 @@ export default async function ArticlePage({ params }: Props) {
 
       {/* FAQs — visible answers match the FAQPage schema above, 1:1. */}
       {post.faqs.length > 0 && (
-        <section className="mt-12">
-          <h2 className="text-2xl font-bold text-stone-900">
+        <section className="mt-14">
+          <h2 className="font-display text-2xl font-semibold text-stone-900 sm:text-3xl">
             Frequently Asked Questions
           </h2>
-          <div className="mt-6 space-y-6">
+          <div className="mt-6 space-y-4">
             {post.faqs.map((faq) => (
-              <div key={faq.question}>
-                <h3 className="text-lg font-semibold text-stone-900">
+              <div
+                key={faq.question}
+                className="rounded-2xl border border-amber-900/10 bg-white p-5 shadow-sm sm:p-6"
+              >
+                <h3 className="text-lg font-bold text-stone-900">
                   {faq.question}
                 </h3>
                 <p className="mt-2 leading-relaxed text-stone-700">
@@ -212,10 +237,10 @@ export default async function ArticlePage({ params }: Props) {
       {/* Related articles */}
       {related.length > 0 && (
         <section className="mt-16">
-          <h2 className="text-2xl font-bold text-stone-900">
+          <h2 className="font-display text-2xl font-semibold text-stone-900 sm:text-3xl">
             More ideas you may like
           </h2>
-          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((p) => (
               <ArticleCard key={p.slug} post={p} />
             ))}
